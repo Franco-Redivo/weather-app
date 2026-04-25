@@ -2,11 +2,11 @@ import {
     getCurrentWeather,
     getWeatherForecast,
     getHistoricalWeather
-} from '../services/weather.service';
-import { isInTimeInterval, locationToCoordinates } from '../utils/weather.utils';
-import weatherMutations from '../models/weatherMutations';
-import weatherQueries from '../models/weatherQueries';
-import { getYoutubeVideos } from '../services/youtube.service';
+} from '../services/weather.service.js';
+import { isInTimeInterval, locationToCoordinates } from '../utils/weather.utils.js';
+import weatherMutations from '../models/weatherMutations.js';
+import weatherQueries from '../models/weatherQueries.js';
+import { getYoutubeVideos } from '../services/youtube.service.js';
 
 export const createWeatherEntry = async (req, res) => {
     try {
@@ -34,7 +34,8 @@ export const createWeatherEntry = async (req, res) => {
         }
 
         const weatherForecast = await getWeatherForecast(latitude, longitude);
-        const weatherEntry = await weatherMutations.createWeatherEntry(location, latitude, longitude, startDate, endDate, weatherForecast, videos);
+        const currentDateTime = new Date().toISOString();
+        const weatherEntry = await weatherMutations.createWeatherEntry(location, latitude, longitude, currentDateTime, currentDateTime, weatherForecast, videos);
         res.json(weatherEntry);
     } catch (error) {
         console.error('Error creating weather entry:', error);
@@ -42,7 +43,7 @@ export const createWeatherEntry = async (req, res) => {
     }
 }
 
-export const getAllWeatherEntries = async (req, res) => {
+export const getWeatherEntries = async (req, res) => {
     try {
         const weatherEntries = await weatherQueries.getAllWeatherEntries();
         res.json(weatherEntries);
@@ -55,6 +56,12 @@ export const getAllWeatherEntries = async (req, res) => {
 export const getWeatherEntryById = async (req, res) => {
     try {
         const { id } = req.params;
+        const parsedId = Number.parseInt(id, 10);
+
+        if (Number.isNaN(parsedId)) {
+            return res.status(400).json({ error: 'Invalid weather entry id' });
+        }
+
         const weatherEntry = await weatherQueries.getWeatherEntryById(id);
         if (!weatherEntry) {
             return res.status(404).json({ error: 'Weather entry not found' });
