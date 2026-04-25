@@ -1,4 +1,4 @@
-import weatherQueries from "../models/weatherQueries";
+import weatherQueries from "../models/weatherQueries.js";
 import { Parser } from 'json2csv';
 
 export const exportWeatherData = async (req, res ) => {
