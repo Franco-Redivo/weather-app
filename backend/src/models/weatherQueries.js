@@ -1,11 +1,11 @@
 import prisma from './client.js';
 
 async function getAllWeatherEntries() {
-    return await prisma.weatherEntry.findMany();
+    return await prisma.weatherQuery.findMany();
 }
 
 async function getWeatherEntryById(id) {
-    return await prisma.weatherEntry.findUnique({
+    return await prisma.weatherQuery.findUnique({
         where: { id: parseInt(id) }
     });
 }
