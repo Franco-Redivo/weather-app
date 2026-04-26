@@ -13,7 +13,10 @@ export const getYoutubeVideos = async (location) => {
     return response.data.items.map(video => ({
       title: video.snippet.title,
       videoId: video.id.videoId,
-      thumbnail: video.snippet.thumbnails.default.url
+      thumbnail:
+        video.snippet.thumbnails.high?.url ||
+        video.snippet.thumbnails.medium?.url ||
+        video.snippet.thumbnails.default?.url
     }));
 
   } catch (error) {
