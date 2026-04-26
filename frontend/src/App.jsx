@@ -4,6 +4,8 @@ import Forecast from './components/Forecast'
 import CurrentWeather from './components/CurrentWeather'
 import ErrorMessage from './components/ErrorMessage'
 import { fetchWeatherForecast } from './services/wetherApi'
+import Videos from './components/Videos'
+import Footer from './components/Footer'
 
 function App() {
   const [data, setData] = useState(null);
@@ -47,6 +49,8 @@ function App() {
             <Forecast data={data} />
           </div>
         )}
+        {data?.videos?.length > 0 && <Videos data={data} />}
+        <Footer />
       </div>
     </div>
   )
