@@ -1,16 +1,108 @@
-# React + Vite
+# Weather App Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React + Vite frontend for the Weather App.
 
-Currently, two official plugins are available:
+This app lets users:
+- Search for a city
+- View current weather conditions
+- View a 5-day forecast
+- View related travel videos
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Tech Stack
 
-## React Compiler
+- React 19
+- Vite 8
+- Tailwind CSS 4
+- Axios
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Prerequisites
 
-## Expanding the ESLint configuration
+- Node.js 18+ (Node.js 20 recommended)
+- npm
+- Backend API running locally at `http://localhost:3000`
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+The frontend currently calls:
+- `http://localhost:3000/api/weather`
+
+This is configured in `src/services/axios.js`.
+
+## Installation
+
+From the `frontend` folder:
+
+```bash
+npm install
+```
+
+## Run in Development
+
+```bash
+npm run dev
+```
+
+Vite will print a local URL (typically `http://localhost:5173`).
+
+## Build for Production
+
+```bash
+npm run build
+```
+
+## Preview Production Build
+
+```bash
+npm run preview
+```
+
+## Lint
+
+```bash
+npm run lint
+```
+
+## Dependencies
+
+Runtime dependencies:
+- `react` `^19.2.5`
+- `react-dom` `^19.2.5`
+- `axios` `^1.15.2`
+- `tailwindcss` `^4.2.4`
+- `@tailwindcss/vite` `^4.2.4`
+
+Dev dependencies:
+- `vite` `^8.0.10`
+- `@vitejs/plugin-react` `^6.0.1`
+- `eslint` `^10.2.1`
+- `@eslint/js` `^10.0.1`
+- `eslint-plugin-react-hooks` `^7.1.1`
+- `eslint-plugin-react-refresh` `^0.5.2`
+- `globals` `^17.5.0`
+- `@types/react` `^19.2.14`
+- `@types/react-dom` `^19.2.3`
+
+## Project Structure
+
+```text
+frontend/
+	src/
+		components/
+			CurrentWeather.jsx
+			ErrorMessage.jsx
+			Forecast.jsx
+			SearchBar.jsx
+			Videos.jsx
+		services/
+			axios.js
+			wetherApi.js
+		utils/
+			weatherCodes.js
+		App.jsx
+		main.jsx
+		styles.css
+```
+
+## Notes
+
+- Make sure the backend is started before searching for a city.
+- If the backend host/port changes, update `baseURL` in `src/services/axios.js`.
+
