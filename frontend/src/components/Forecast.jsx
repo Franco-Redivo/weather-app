@@ -16,7 +16,7 @@ const Forecast = ({ data }) => {
                 </div>
             </div>
 
-            <div className="grid flex-1 gap-4 sm:grid-cols-2 xl:flex xl:items-center xl:justify-center xl:overflow-x-auto xl:px-1 xl:pb-2">
+            <div className="grid flex-1 gap-4 sm:grid-cols-2 xl:flex xl:flex-nowrap xl:items-center xl:justify-start xl:overflow-x-auto xl:px-1 xl:pb-2">
                 {daily.time?.map((date, index) => {
                     const { description, icon } = getWeatherDescriptionAndIcon(daily.weather_code?.[index]);
                     return (
