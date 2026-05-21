@@ -1,0 +1,53 @@
+services:
+  frontend:
+    image: weather-app-frontend
+    build:
+      context: ./frontend
+      dockerfile: dev.Dockerfile
+    volumes:
+      - ./frontend:/usr/src/app
+      - /usr/src/app/node_modules
+    container_name: weather-front-dev
+
+  backend:
+    image: weather-app-backend
+    build:
+      context: ./backend
+      dockerfile: dev.Dockerfile
+    command: sh -c "npx prisma migrate deploy && npm run dev"
+    env_file:
+      - ./backend/.env
+    environment:
+      DATABASE_URL: postgres://franco:postgres@postgres:5432/weatherdb
+    volumes:
+      - ./backend:/usr/src/app
+      - /usr/src/app/node_modules
+    depends_on:
+      - postgres
+    container_name: weather-back-dev
+
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: franco
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: weatherdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    container_name: weather-postgres-dev
+
+  nginx:
+    image: nginx:1.29
+    volumes:
+      - ./nginx.dev.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "8080:80"
+    container_name: weather-nginx-dev
+    depends_on:
+      - frontend
+      - backend
+
+volumes:
+  postgres_data: {}
