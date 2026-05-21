@@ -1,0 +1,61 @@
+services:
+  frontend:
+    image: weather-app-frontend:latest
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: weather-front
+
+  backend:
+    image: weather-app-backend:latest
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      PORT: "3000"
+      # Secrets provided via Docker secrets; server will load *_FILE into env if present
+      DATABASE_URL_FILE: /run/secrets/database_url
+      YOUTUBE_API_KEY_FILE: /run/secrets/youtube_api_key
+    secrets:
+      - database_url
+      - youtube_api_key
+    depends_on:
+      - postgres
+    container_name: weather-back
+
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: franco
+      # Password provided via Docker secret to avoid committing it
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+      POSTGRES_DB: weatherdb
+    secrets:
+      - postgres_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    container_name: weather-postgres
+
+  nginx:
+    image: nginx:1.29
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "8080:80"
+    container_name: weather-nginx
+    depends_on:
+      - frontend
+      - backend
+
+volumes:
+  postgres_data: {}
+
+secrets:
+  postgres_password:
+    file: ./secrets/postgres_password
+  database_url:
+    file: ./secrets/database_url
+  youtube_api_key:
+    file: ./secrets/youtube_api_key
